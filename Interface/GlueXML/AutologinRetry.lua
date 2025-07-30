@@ -1,10 +1,23 @@
 local autologinActive = false
+local autoStart = false
 local AutologinLoopFrame = CreateFrame("Frame")
 local checkInterval = 0.2 -- 200 ms
 local elapsedSinceLastCheck = 0
-
 local lastGlueDialogErrorText = nil
 
+
+-- Config loading
+if AutologinRetry then
+    if AutologinRetry.autoStart ~= nil then
+        autoStart = AutologinRetry.autoStart
+    end
+    if AutologinRetry.checkInterval ~= nil then
+        checkInterval = AutologinRetry.checkInterval
+    end
+    if AutologinRetry.alarmCooldown ~= nil then
+        alarmCooldown = AutologinRetry.alarmCooldown
+    end
+end
 
 -- Cannot find a way to hook the GlueDialog Error text directly, so we use a secure hook
 hooksecurefunc("GlueDialog_Show", function(which, text)
@@ -136,3 +149,19 @@ function Autologin()
         AutologinStatusBox:SetBackdropColor(1.0, 1.0, 1.0, 1.0)  -- White (R, G, B, Alpha)
     end
 end
+
+local function AutoStart(self, elapsed)
+    -- Wait until required UI elements are available
+    if AccountLoginLoginButton and AutologinRetryButton and AutologinStatusText and AutologinStatusBox then
+        -- Elements are ready, start autologin if needed
+        AutologinLoopFrame:SetScript("OnUpdate", nil)
+        Autologin()  -- or StartAutologin() if you used the refactor
+        
+    end
+end
+
+-- If autoStart is true, set the OnUpdate script to start autologin 
+if autoStart then
+    AutologinLoopFrame:SetScript("OnUpdate", AutoStart)
+end
+
