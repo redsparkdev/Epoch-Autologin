@@ -5,7 +5,7 @@ The script will continuously attempt to log in until it reaches an Alarm State, 
 
 - An unknown error dialog appears, or
 - You reach the realm or character selection screen.
-- Stores a Signal in MEMORY in the format `§§AUTO-LOGIN§§<timestamp><tag>::<message>§§AUTO-LOGIN-END§§`, this can be read by: https://github.com/redsparkdev/AutoLogin-Mem-Reader
+- Stores a Signal in MEMORY in the format `§§AUTO-LOGIN§§<timestamp>::<tag>::<message>§§AUTO-LOGIN-END§§`, this can be read by: https://github.com/redsparkdev/AutoLogin-Mem-Reader
 
 ## NOTE:
 Most dialog types are still unknown. Handling for them will be added as they are identified.
