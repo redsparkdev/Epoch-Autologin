@@ -165,12 +165,12 @@
 
 	<ModelFFX name="AccountLogin" toplevel="true" parent="GlueParent" setAllPoints="true" enableKeyboard="true" hidden="true" fogNear="0" fogFar="1200" glow="0.08">
 		<Frames>
-			<Frame name="AutologinRetryFrame" parent="AccountLogin" frameStrata="FULLSCREEN_DIALOG">
+			<Frame name="AutologinRetryFrame" parent="GlueParent" frameStrata="FULLSCREEN_DIALOG">
 				<Size>
 					<AbsDimension x="400" y="100"/>
 				</Size>
 				<Anchors>
-					<Anchor point="TOP" relativeTo="AccountLogin" relativePoint="TOP">
+					<Anchor point="TOP" relativeTo="GlueParent" relativePoint="TOP">
 						<Offset>
 							<AbsDimension x="0" y="-10"/>
 						</Offset>
