@@ -164,6 +164,60 @@
 
 	<ModelFFX name="AccountLogin" toplevel="true" parent="GlueParent" setAllPoints="true" enableKeyboard="true" hidden="true" fogNear="0" fogFar="1200" glow="0.08">
 		<Frames>
+			<Frame name="AutologinRetryFrame" parent="AccountLogin" frameStrata="FULLSCREEN_DIALOG">
+				<Size>
+					<AbsDimension x="400" y="100"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOP" relativeTo="AccountLogin" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="0" y="-10"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+					<BackgroundInsets>
+						<AbsInset left="10" right="10" top="10" bottom="10"/>
+					</BackgroundInsets>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<EdgeSize>
+						<AbsValue val="32"/>
+					</EdgeSize>
+				</Backdrop>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="AutologinStatusText" inherits="GlueFontNormal" justifyH="CENTER" text="Status: Idle">
+							<Size>
+								<AbsDimension x="380" y="10"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOP" relativePoint="TOP">
+									<Offset>
+										<AbsDimension x="0" y="-20"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<Button name="AutologinRetryButton" inherits="GlueButtonSmallTemplate" text="Autologin START">
+						<Size x="200" y="40"/>
+						<Anchors>
+							<Anchor point="CENTER"/>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								Autologin();
+							</OnClick>
+						</Scripts>
+					</Button>
+	
+				</Frames>
+			</Frame>
+
 			<Frame name="AccountLoginUI" setAllPoints="true">
 				<Layers>
 					<Layer level="ARTWORK">
