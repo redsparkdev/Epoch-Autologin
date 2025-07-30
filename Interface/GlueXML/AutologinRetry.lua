@@ -38,9 +38,9 @@ local function Autologin_OnUpdate(self, elapsed)
         -- Check if we are still on the login screen
         if not IsOnLoginScreen() then
             AutologinStatusText:SetText("Not on login screen!")
-            autologinActive = false
-            AutologinRetryButton:SetText("Autologin START")
-            self:SetScript("OnUpdate", nil)
+            -- autologinActive = false
+            -- AutologinRetryButton:SetText("Autologin START")
+            -- self:SetScript("OnUpdate", nil)
 
             AutologinStatusBox:SetBackdropColor(1.0, 0.0, 0.0, 1.0)  -- Red (R, G, B, Alpha)
             -- Play alarm sound to indicate we are not on the login screen
