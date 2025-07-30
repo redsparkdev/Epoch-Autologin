@@ -4,6 +4,8 @@ local AutologinLoopFrame = CreateFrame("Frame")
 local checkInterval = 0.2 -- 200 ms
 local elapsedSinceLastCheck = 0
 local lastGlueDialogErrorText = nil
+local memorySignals = {}
+
 
 
 -- Config loading
@@ -25,6 +27,25 @@ hooksecurefunc("GlueDialog_Show", function(which, text)
         lastGlueDialogErrorText = text
     end
 end)
+
+
+local function MakeMemorySignal(msg, tag) 
+    prefix = "§§AUTO-LOGIN§§";
+    sufix = "§§AUTO-LOGIN-END§§";
+    spacer = "::"
+    tag = tag or "BASIC"
+
+-- Overwrite old value to erase from memory
+    if _G[tag] then
+        _G[tag] = string.rep(" ", #_G[tag])
+    end
+
+    if tag and msg then
+        _G[tag] = prefix .. tostring(time()) .. spacer .. tag .. spacer .. msg .. sufix
+    end
+
+end
+
 
 local function IsOnLoginScreen()
     -- Replace with your actual check if needed
@@ -69,15 +90,16 @@ local function Autologin_OnUpdate(self, elapsed)
             local dialogType = GlueDialog.which or "UNKNOWN"
             -- If GlueDialog is shown, we assume we are in a dialog state
             AutologinStatusText:SetText("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
+            
 
             if dialogType == "CANCEL" then
                 AutologinStatusText:SetText("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
-
+                MakeMemorySignal((GlueDialogText:GetText() or "NO TEXT"))
 
 
             elseif dialogType == "CONNECTION_HELP_HTML" then
                 AutologinStatusText:SetText("Type: " .. dialogType .. " | Text: " .. lastGlueDialogErrorText or "NO ERROR")
-                               
+                MakeMemorySignal("CONNECTION_HELP_HTML")                 
                 
                 -- Click the OK button for HTML dialog
                 if GlueDialogButton2
