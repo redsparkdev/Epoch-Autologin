@@ -94,6 +94,17 @@ local function Autologin_OnUpdate(self, elapsed)
 
             if dialogType == "CANCEL" then
                 AutologinStatusText:SetText("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
+                if not GlueDialogText:GetText() then
+                    GlueDialogText:SetText("No text provided for this dialog.")
+                    -- Click the CANCEL button
+                    if GlueDialogButton1
+                        and GlueDialogButton1:IsShown()
+                        and GlueDialogButton1:IsVisible()
+                        and GlueDialogButton1:IsEnabled()
+                    then
+                        GlueDialogButton1:Click()
+                    end
+                end
                 MakeMemorySignal((GlueDialogText:GetText() or "NO TEXT"))
 
 
@@ -110,6 +121,31 @@ local function Autologin_OnUpdate(self, elapsed)
                     GlueDialogButton2:Click()
                 end
 
+            elseif dialogType == "DISCONNECTED" then
+                AutologinStatusText:SetText("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
+                MakeMemorySignal("DISCONNECTED") 
+
+                -- Click the OK button for HTML dialog
+                if GlueDialogButton1
+                    and GlueDialogButton1:IsShown()
+                    and GlueDialogButton1:IsVisible()
+                    and GlueDialogButton1:IsEnabled()
+                then
+                    GlueDialogButton1:Click()
+                end
+            
+            elseif dialogType == "OKAY" then
+                AutologinStatusText:SetText("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
+                MakeMemorySignal("OKAY BOX") 
+                -- Click the OK button for OK dialog
+                if GlueDialogButton1
+                    and GlueDialogButton1:IsShown()
+                    and GlueDialogButton1:IsVisible()
+                    and GlueDialogButton1:IsEnabled()
+                then
+                    GlueDialogButton1:Click()
+                end
+            
             else
                 AutologinStatusText:SetText("UNKNOWN Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() .. "| ERROR:" .. lastGlueDialogErrorText or "NO TEXT"))
                 AutologinStatusBox:SetBackdropColor(1.0, 0.0, 0.0, 1.0)  -- Red (R, G, B, Alpha)
