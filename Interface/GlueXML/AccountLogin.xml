@@ -167,7 +167,7 @@
 		<Frames>
 			<Frame name="AutologinRetryFrame" parent="GlueParent" frameStrata="FULLSCREEN_DIALOG">
 				<Size>
-					<AbsDimension x="400" y="100"/>
+					<AbsDimension x="400" y="150"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOP" relativeTo="GlueParent" relativePoint="TOP">
@@ -191,7 +191,7 @@
 					<Layer level="ARTWORK">
 						<FontString name="AutologinStatusText" inherits="GlueFontNormal" justifyH="CENTER" text="Status: Idle">
 							<Size>
-								<AbsDimension x="380" y="10"/>
+								<AbsDimension x="1000" y="30"/>
 							</Size>
 							<Anchors>
 								<Anchor point="TOP" relativePoint="TOP">

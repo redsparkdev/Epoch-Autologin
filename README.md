@@ -10,6 +10,8 @@ The script will continuously attempt to log in until it reaches an Alarm State, 
 ## NOTE:
 Most dialog types are still unknown. Handling for them will be added as they are identified.
 
+USing this to figure out Frames https://github.com/Ennie/wow-ui-source/tree/master/GlueXML
+
 
 # ORIGINAL Epoch-Autologin
 
