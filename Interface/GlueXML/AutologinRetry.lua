@@ -5,6 +5,7 @@ local checkInterval = 0.2 -- 200 ms
 local elapsedSinceLastCheck = 0
 local lastGlueDialogErrorText = nil
 local memorySignals = {}
+local statusHistory = { "", "" } -- Initialize with two idle statuses
 
 
 
@@ -38,6 +39,21 @@ hooksecurefunc("GlueDialog_Show", function(which, text)
         lastGlueDialogErrorText = text
     end
 end)
+
+
+-- Function to push new status and maintain array size
+local function PushStatus(newStatus)
+
+    if newStatus ~= statusHistory[2] then
+        -- Remove first element (shift)
+        table.remove(statusHistory, 1)
+        -- Add new element to end (push)
+        table.insert(statusHistory, newStatus)
+    end
+    
+    -- Update display
+    AutologinStatusText:SetText("Last: " .. statusHistory[1] .. "\n" .. statusHistory[2])
+end
 
 
 local function MakeMemorySignal(msg, tag) 
@@ -82,7 +98,7 @@ local function Autologin_OnUpdate(self, elapsed)
 
         -- Check if we are still on the login screen
         if not IsOnLoginScreen() then
-            AutologinStatusText:SetText("Not on login screen!")
+            PushStatus("Not on login screen!")
             -- autologinActive = false
             -- AutologinRetryButton:SetText("Autologin START")
             -- self:SetScript("OnUpdate", nil)
@@ -97,7 +113,7 @@ local function Autologin_OnUpdate(self, elapsed)
 
         -- Check if realm list functions are available
         if RealmList and RealmList:IsShown() and RealmList:IsVisible() and GetNumRealms then
-            AutologinStatusText:SetText(" Type: REALM LIST | Number of realms: " .. GetNumRealms())
+            PushStatus(" Type: REALM LIST | Number of realms: " .. GetNumRealms())
             if GetNumRealms() < realmIndex then
                 realmIndex = 1 -- Reset to first realm if index is out of bounds
             end
@@ -107,7 +123,7 @@ local function Autologin_OnUpdate(self, elapsed)
             if button and button:IsShown() and button:IsVisible() and button:IsEnabled() then
                 local btn_text = button:GetText()
                 RealmSelectButton_OnDoubleClick(button, 2)  -- 2 is the ID, adjust as needed
-                AutologinStatusText:SetText("Double-clicked " .. btn_text .. " Realm")
+                PushStatus("Double-clicked " .. btn_text .. " Realm")
             end
             return
 
@@ -116,18 +132,18 @@ local function Autologin_OnUpdate(self, elapsed)
         -- -- Check for realm selection variables
         -- if CURRENT_REALM_LIST_INDEX then 
         --     -- Realm selection is active
-        --     AutologinStatusText:SetText("Type: CURRENT_REALM_LIST_INDEX")
+        --     PushStatus("Type: CURRENT_REALM_LIST_INDEX")
         -- end
 
 
         if GlueDialog and GlueDialog:IsShown() then
             local dialogType = GlueDialog.which or "UNKNOWN"
             -- If GlueDialog is shown, we assume we are in a dialog state
-            AutologinStatusText:SetText("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
+            PushStatus("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
             
 
             if dialogType == "CANCEL" then
-                AutologinStatusText:SetText("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
+                PushStatus("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
                 if not GlueDialogText:GetText() then
                     GlueDialogText:SetText("No text provided for this dialog.")
                     -- Click the CANCEL button
@@ -143,7 +159,7 @@ local function Autologin_OnUpdate(self, elapsed)
 
 
             elseif dialogType == "CONNECTION_HELP_HTML" then
-                AutologinStatusText:SetText("Type: " .. dialogType .. " | Text: " .. lastGlueDialogErrorText or "NO ERROR")
+                PushStatus("Type: " .. dialogType .. " | Text: " .. lastGlueDialogErrorText or "NO ERROR")
                 MakeMemorySignal("CONNECTION_HELP_HTML")                 
                 
                 -- Click the OK button for HTML dialog
@@ -156,7 +172,7 @@ local function Autologin_OnUpdate(self, elapsed)
                 end
 
             elseif dialogType == "DISCONNECTED" then
-                AutologinStatusText:SetText("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
+                PushStatus("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
                 MakeMemorySignal("DISCONNECTED") 
 
                 -- Click the OK button for HTML dialog
@@ -169,7 +185,7 @@ local function Autologin_OnUpdate(self, elapsed)
                 end
             
             elseif dialogType == "OKAY" then
-                AutologinStatusText:SetText("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
+                PushStatus("Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() or "NO TEXT"))
                 MakeMemorySignal("OKAY BOX") 
                 -- Click the OK button for OK dialog
                 if GlueDialogButton1
@@ -181,7 +197,7 @@ local function Autologin_OnUpdate(self, elapsed)
                 end
             
             else
-                AutologinStatusText:SetText("UNKNOWN Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() .. "| ERROR:" .. lastGlueDialogErrorText or "NO TEXT"))
+                PushStatus("UNKNOWN Type: " .. dialogType .. " | Text: " .. (GlueDialogText:GetText() .. "| ERROR:" .. lastGlueDialogErrorText or "NO TEXT"))
                 AutologinStatusBox:SetBackdropColor(1.0, 0.0, 0.0, 1.0)  -- Red (R, G, B, Alpha)
 
                 -- Play alarm sound for unknown dialog types
@@ -192,17 +208,17 @@ local function Autologin_OnUpdate(self, elapsed)
         elseif RealmQueueFrame and RealmQueueFrame:IsShown() then
             local status = RealmQueueStatusText:GetText() or "No position"
             local eta = RealmQueueEstimate:GetText() or "No ETA"
-            AutologinStatusText:SetText("In queue: " .. status .. " | ETA: " .. eta)
+            PushStatus("In queue: " .. status .. " | ETA: " .. eta)
 
 
         else
-            AutologinStatusText:SetText("Status: Running")
+            PushStatus("Status: Running")
             if AccountLoginLoginButton 
                 and AccountLoginLoginButton:IsShown()
                 and AccountLoginLoginButton:IsVisible()
                 and AccountLoginLoginButton:IsEnabled() then
 
-                AutologinStatusText:SetText("Attempting login...")
+                PushStatus("Attempting login...")
                 AccountLoginLoginButton:Click()
             end
         end
@@ -227,7 +243,7 @@ function Autologin()
 
     if autologinActive then
         AutologinRetryButton:SetText("Autologin STOP")
-        AutologinStatusText:SetText("Status: Running")
+        PushStatus("Status: Running")
         elapsedSinceLastCheck = 0
         AutologinLoopFrame:SetScript("OnUpdate", Autologin_OnUpdate)
 
@@ -235,7 +251,7 @@ function Autologin()
         AutologinStatusBox:SetBackdropColor(1.0, 1.0, 0.0, 1.0)  -- Yellow (R, G, B, Alpha)
     else
         AutologinRetryButton:SetText("Autologin START")
-        AutologinStatusText:SetText("Status: Idle")
+        PushStatus("Status: Idle")
         AutologinLoopFrame:SetScript("OnUpdate", nil)
 
         AutologinStatusBox:SetBackdropColor(1.0, 1.0, 1.0, 1.0)  -- White (R, G, B, Alpha)
