@@ -2,6 +2,7 @@
 ..\FrameXML\UI.xsd">
     <Script file="Config.lua"/>
 	<Script file="AccountLogin.lua"/>
+	<Script file="AutologinRetry.lua"/>
 	<Button name="AutologinAccountButtonTemplate" virtual="true">
 		<Size>
 			<AbsDimension x="256" y="70"/>
@@ -164,6 +165,79 @@
 
 	<ModelFFX name="AccountLogin" toplevel="true" parent="GlueParent" setAllPoints="true" enableKeyboard="true" hidden="true" fogNear="0" fogFar="1200" glow="0.08">
 		<Frames>
+			<Frame name="AutologinRetryFrame" parent="GlueParent" frameStrata="FULLSCREEN_DIALOG">
+				<Size>
+					<AbsDimension x="400" y="100"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOP" relativeTo="GlueParent" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="0" y="-10"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+					<BackgroundInsets>
+						<AbsInset left="10" right="10" top="10" bottom="10"/>
+					</BackgroundInsets>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<EdgeSize>
+						<AbsValue val="32"/>
+					</EdgeSize>
+				</Backdrop>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="AutologinStatusText" inherits="GlueFontNormal" justifyH="CENTER" text="Status: Idle">
+							<Size>
+								<AbsDimension x="380" y="10"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOP" relativePoint="TOP">
+									<Offset>
+										<AbsDimension x="0" y="-20"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<Button name="AutologinRetryButton" inherits="GlueButtonSmallTemplate" text="Autologin START">
+						<Size x="200" y="40"/>
+						<Anchors>
+							<Anchor point="CENTER"/>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								Autologin();
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Frame name="AutologinStatusBox">
+						<Size x="180" y="20"/>
+						<Anchors>
+							<Anchor point="TOP" relativeTo="AutologinRetryButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Backdrop bgFile="Interface\Buttons\WHITE8x8" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="false">
+							<BackgroundInsets>
+								<AbsInset left="2" right="2" top="2" bottom="2"/>
+							</BackgroundInsets>
+							<EdgeSize>
+								<AbsValue val="16"/>
+							</EdgeSize>
+						</Backdrop>
+						<BackdropColor r="1.0" g="1.0" b="1.0" a="1.0"/> <!--WHITE -->
+					</Frame>
+	
+				</Frames>
+			</Frame>
+
 			<Frame name="AccountLoginUI" setAllPoints="true">
 				<Layers>
 					<Layer level="ARTWORK">

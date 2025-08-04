@@ -1,4 +1,17 @@
-# Epoch-Autologin
+# EXTRA Added by Red_Spark
+Auto-login will begin automatically when the client starts (disabled by default — see Config.lua to enable).
+
+The script will continuously attempt to log in until it reaches an Alarm State, which occurs when either:
+
+- An unknown error dialog appears, or
+- You reach the realm or character selection screen.
+- Stores a Signal in MEMORY in the format `§§AUTO-LOGIN§§<timestamp>::<tag>::<message>§§AUTO-LOGIN-END§§`, this can be read by: https://github.com/redsparkdev/AutoLogin-Mem-Reader
+
+## NOTE:
+Most dialog types are still unknown. Handling for them will be added as they are identified.
+
+
+# ORIGINAL Epoch-Autologin
 
 Enhanced login system for Project Epoch client with account management and character sorting features.
 
