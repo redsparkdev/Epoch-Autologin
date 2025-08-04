@@ -38,4 +38,8 @@ AutologinRetry = {
     checkInterval = 0.2, -- 200 ms
     alarmCooldown = 1.0, -- 1 second cooldown for alarm sound
 
+    -- 1 = Kazen
+    -- 2 = Gurubashi
+    realmIndex = 1, -- Default realm index to select
+
 }

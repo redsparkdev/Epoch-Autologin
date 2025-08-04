@@ -12,12 +12,23 @@ local memorySignals = {}
 if AutologinRetry then
     if AutologinRetry.autoStart ~= nil then
         autoStart = AutologinRetry.autoStart
+    else
+        autoStart = false -- Default to false if not set
     end
     if AutologinRetry.checkInterval ~= nil then
         checkInterval = AutologinRetry.checkInterval
+    else
+        checkInterval = 0.2 -- Default to 200 ms if not set
     end
     if AutologinRetry.alarmCooldown ~= nil then
         alarmCooldown = AutologinRetry.alarmCooldown
+    else
+        alarmCooldown = 1.0 -- Default to 1 second if not set
+    end
+    if AutologinRetry.realmIndex ~= nil then
+        realmIndex = AutologinRetry.realmIndex
+    else
+        realmIndex = 1 -- Default to first realm if not set
     end
 end
 
@@ -84,6 +95,29 @@ local function Autologin_OnUpdate(self, elapsed)
         end
 
 
+        -- Check if realm list functions are available
+        if GetNumRealms and GetNumRealms() > 0 then
+
+            if GetNumRealms() < realmIndex then
+                realmIndex = 1 -- Reset to first realm if index is out of bounds
+            end
+
+            button = _G["RealmListRealmButton".. realmIndex]
+            
+            if button and button:IsShown() and button:IsVisible() and button:IsEnabled() then
+                local btn_text = button:GetText()
+                RealmSelectButton_OnDoubleClick(button, 2)  -- 2 is the ID, adjust as needed
+                AutologinStatusText:SetText("Double-clicked " .. btn_text .. " Realm")
+            end
+            return
+
+        end
+
+        -- -- Check for realm selection variables
+        -- if CURRENT_REALM_LIST_INDEX then 
+        --     -- Realm selection is active
+        --     AutologinStatusText:SetText("Type: CURRENT_REALM_LIST_INDEX")
+        -- end
 
 
         if GlueDialog and GlueDialog:IsShown() then
