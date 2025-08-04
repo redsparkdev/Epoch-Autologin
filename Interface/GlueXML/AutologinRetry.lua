@@ -96,8 +96,8 @@ local function Autologin_OnUpdate(self, elapsed)
 
 
         -- Check if realm list functions are available
-        if GetNumRealms and GetNumRealms() > 0 then
-
+        if RealmList and RealmList:IsShown() and RealmList:IsVisible() and GetNumRealms then
+            AutologinStatusText:SetText(" Type: REALM LIST | Number of realms: " .. GetNumRealms())
             if GetNumRealms() < realmIndex then
                 realmIndex = 1 -- Reset to first realm if index is out of bounds
             end
